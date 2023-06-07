@@ -1,0 +1,62 @@
+#INTERFACESv4="eth0"
+ddns-updates on;
+update-conflict-detection false;
+allow booting;
+allow bootp;
+do-forward-updates on;
+update-optimization on;
+allow declines;
+ddns-update-style interim;
+include "/etc/dhcp/rndc.key";
+ddns-domainname "";
+update-static-leases off;
+
+option domain-name "test.ru";
+option domain-search "test.ru";
+
+option domain-name-servers 192.168.86.129;
+option dhcp-server-identifier 192.168.86.132;
+
+#Следующая строка нужна только если используется Samba с WINS
+#option netbios-name-servers 10.0.2.102;
+
+default-lease-time 129600;
+max-lease-time 1296000;
+authoritative;
+
+# Для установки по сети
+enable-tftp;
+next-server 192.168.86.133;
+option architecture code 93 = unsigned integer 16 ;
+if option architecture = 00:07 { filename "bootx64.efi"; }
+elsif option architecture = 00:09 { filename "bootx64.efi"; }
+else { filename "pxelinux.0"; }
+
+#filename "pxelinux.0";
+
+#Эта подсеть должна соответствовать подсети вашей локальной сети, обращенной к устройству Ethernet.
+Subnet 192.168.86.0 netmask 255.255.255.0 {
+  option broadcast-address 192.168.86.255;
+  option subnet-mask 255.255.255.0;
+  option routers 192.168.86.2;
+  pool {
+    range 192.168.86.10 192.168.86.177;
+    allow known-clients;
+    allow unknown-clients;
+    max-lease-time 86400;
+    default-lease-time 43200;
+  }
+  zone test.ru. {
+    primary 192.168.86.129;
+    key "rndc-key";
+    }
+}
+
+host repo{
+ hardware ethernet 00:0C:29:51:10:41;
+ fixed-address 192.168.86.131;
+}
+host osinst{
+ hardware ethernet 00:0C:29:C8:C2:04;
+ fixed-address 192.168.86.133;
+}

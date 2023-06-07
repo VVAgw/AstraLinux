@@ -1,0 +1,10 @@
+adprofile_ldap_base_dn				DC=alfanord,DC=ru
+admigrationtask_ipa_password			FlvbyFkmaf
+admigrationtask_ipa_login			admin
+ad_realm_password				gfhjkmflvbyf113
+ad_realm					aldpro1123
+admigrationtask_user_password			gfhjkmflvbyf113
+admigrationtask_objects				group,organizational-unit,user
+admigrationtask_aldpro_organizational_unit_dn	ou=ansecurity.ru,cn=orgunits,cn=accounts,dc=ansecurity,dc=ru
+admigrationtask_ad_organizational_unit_dn	OU=AlfaNord,DC=alfanord,DC=ru
+admigrationtask_domain_name			alfanord.ru

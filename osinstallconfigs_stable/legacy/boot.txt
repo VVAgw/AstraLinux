@@ -1,0 +1,49 @@
+UI vesamenu.c32
+
+# 0 - отключение приглашения командной строки. Загрузка начнется сразу
+PROMPT 0
+
+# Автоматический выбор меню по таймеру. Секунды вычисляются делением на 10 введенного значения
+TIMEOUT 300
+
+# Выбор по-умолчанию загрузки по сети
+DEFAULT pxeinstall
+
+menu background back.jpg
+menu title User Management Portal Boot Menu
+
+# Локальная загрузка с диска
+LABEL bootlocal
+    menu label Boot from first HDD
+    kernel chain.c32
+    append hd0 0
+TEXT HELP
+Normal boot from HDD
+ENDTEXT
+
+# Загрузка из сети
+LABEL pxeinstall
+    menu label Astra Linux system install
+    kernel linux
+    append initrd=initrd.gz vga=788 auto=true priority=critical debian-installer/locale=ru_RU console-keymaps-at/keymap=ru hostname=astra domain=local astra-license/license=true url=tftp://192.168.50.249/{PROFILE_UNIQ_NAME}/{PRESEED_FILE_NAME} interface=auto netcfg/dhcp_timeout=60
+TEXT HELP
+Install AstraLinux Operating System
+ENDTEXT
+
+# Clonezilla
+LABEL Clonezilla-live
+      MENU LABEL Clonezilla Live
+      KERNEL vmlinuz
+   APPEND initrd=live/initrd.img boot=live username=user union=overlay config components noswap edd=on nomodeset nodmraid locales=ru_RU.UTF-8 keyboard-layouts=NONE ocs_live_run="ocs-live-general" ocs_live_extra_param="" ocs_live_batch=no vga=791 net.ifnames=0 nosplash noprompt fetch=tftp://192.168.50.249/live/filesystem.squashfs
+TEXT HELP
+Backup/Recovery
+ENDTEXT
+
+# GParted
+LABEL GParted Live
+  MENU LABEL GParted Live 
+  KERNEL /gplive/vmlinuz
+  APPEND initrd=/gplive/initrd.img boot=live union=overlay username=user config components noswap noeject vga=788 fetch=http://192.168.50.249/tftp/gplive/filesystem.squashfs
+TEXT HELP
+Disk Utilites
+ENDTEXT
